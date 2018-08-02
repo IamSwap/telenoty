@@ -8,6 +8,13 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+window.Bus = new Vue();
+
+// Import Vue Router
+import VueRouter from 'vue-router';
+Vue.use(VueRouter);
+
+window.swal = require('sweetalert');
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -15,8 +22,17 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
+Vue.component('dashboard', require('./components/Dashboard.vue'));
+
+import routes from './routes';
+
+const router = new VueRouter({
+    mode: 'history',
+    linkActiveClass: 'active',
+    routes
+});
 
 const app = new Vue({
+    router,
     el: '#app'
 });
