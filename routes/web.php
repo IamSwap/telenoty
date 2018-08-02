@@ -33,6 +33,8 @@ Route::post('/<token>/webhook', function () {
     $update = Telegram::commandsHandler(true);
     $updates = Telegram::getWebhookUpdates();
 
+    \Log::info(request()->all());
+
     // Commands handler method returns an Update object.
     // So you can further process $update object
     // to however you want.
@@ -41,3 +43,4 @@ Route::post('/<token>/webhook', function () {
 });
 
 // test
+// Telegram::setWebhook(['url' => 'https://telenoty.com/<token>/webhook']);
