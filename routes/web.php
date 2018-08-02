@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,5 +14,14 @@
 */
 
 Route::get('/', function () {
-    return Telegram::getUpdates();
+    //return Telegram::getUpdates();
+});
+
+Route::get('/notify/{token}', function ($token, Request $request) {
+    \Log::info($request->all());
+
+    Telegram::sendMessage([
+        'chat_id' => $token,
+        'text' => json_encode($request->all())
+    ]);
 });
