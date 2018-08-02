@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Telegram::setWebhook(['url' => config('app.url') . '/<token>/webhook']);
+//Telegram::setWebhook(['url' => config('app.url') . '/<token>/webhook']);
 
 Route::get('/', function () {
     //return Telegram::getUpdates();
