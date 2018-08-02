@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
 Telegram::setWebhook(['url' => config('app.url') . '/<token>/webhook']);
 
 Route::get('/', function () {
-    return Telegram::getUpdates();
+    //return Telegram::getUpdates();
 });
 
 Route::post('/notify/{token}', function ($token, Request $request) {
