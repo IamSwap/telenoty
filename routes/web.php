@@ -17,7 +17,7 @@ Route::get('/', function () {
     //return Telegram::getUpdates();
 });
 
-Route::get('/notify/{token}', function ($token, Request $request) {
+Route::post('/notify/{token}', function ($token, Request $request) {
     \Log::info($request->all());
 
     Telegram::sendMessage([
