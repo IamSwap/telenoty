@@ -13,17 +13,31 @@ use Illuminate\Http\Request;
 |
 */
 
+Telegram::setWebhook(['url' => config('app.url') . '/<token>/webhook']);
+
 Route::get('/', function () {
-    //return Telegram::getUpdates();
+    return Telegram::getUpdates();
 });
 
 Route::post('/notify/{token}', function ($token, Request $request) {
     \Log::info($request->all());
+    $status = $request->input('status');
 
     Telegram::sendMessage([
         'chat_id' => $token,
         'text' => json_encode($request->all())
     ]);
+});
+
+Route::post('/<token>/webhook', function () {
+    $update = Telegram::commandsHandler(true);
+    $updates = Telegram::getWebhookUpdates();
+
+    // Commands handler method returns an Update object.
+    // So you can further process $update object
+    // to however you want.
+
+    return 'ok';
 });
 
 // test
