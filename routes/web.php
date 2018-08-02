@@ -25,3 +25,5 @@ Route::post('/notify/{token}', function ($token, Request $request) {
         'text' => json_encode($request->all())
     ]);
 });
+
+// test
