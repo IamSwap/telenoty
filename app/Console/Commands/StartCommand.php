@@ -12,14 +12,14 @@ class StartCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'start';
+    protected $name = 'start';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Start command to get you started';
+    protected $description = 'How to use TeleNoty Notification Bot';
 
     /**
      * Execute the console command.
@@ -28,33 +28,28 @@ class StartCommand extends Command
      */
     public function handle($arguments)
     {
-        // This will send a message using `sendMessage` method behind the scenes to
-        // the user/chat id who triggered this command.
-        // `replyWith<Message|Photo|Audio|Video|Voice|Document|Sticker|Location|ChatAction>()` all the available methods are dynamically
-        // handled when you replace `send<Method>` with `replyWith` and use the same parameters - except chat_id does NOT need to be included in the array.
-        $this->replyWithMessage(['text' => 'Hello! Welcome to our bot, Here are our available commands:']);
-
-        // This will update the chat status to typing...
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
-        // This will prepare a list of available commands and send the user.
-        // First, Get an array of all registered commands
-        // They'll be in 'command-name' => 'Command Handler Class' format.
-        $commands = $this->getTelegram()->getCommands();
+        $message = '
+            Hello, ' .$this->getFromName(). '. Welcome to TeleNoty bot! 🤖 🎉
 
-        // Build the list
-        $response = '';
-        foreach ($commands as $name => $command) {
-            $response .= sprintf('/%s - %s' . PHP_EOL, $name, $command->getDescription());
-        }
+This bot is used to receive *Laravel Forge\'s* deployment notifications through Telegram.
 
-        // Reply with the commands list
-        $this->replyWithMessage(['text' => $response]);
+Before we start, please make sure you are currently inside [TeleNoty dashboard](https://telenoty.com/dashboard).
 
-        // Trigger another command dynamically from within this command
-        // When you want to chain multiple commands within one or process the request further.
-        // The method supports second parameter arguments which you can optionally pass, By default
-        // it'll pass the same arguments that are received for this command originally.
-        $this->triggerCommand('subscribe');
+To start, type this command:
+/authorize _<server-token>_';
+
+        $this->replyWithMessage(['text' => $message, 'parse_mode' => 'markdown']);
+    }
+
+    /**
+     * Get from name
+     *
+     * @return string
+     */
+    private function getFromName()
+    {
+        return $this->update['message']['from']['first_name'] . ' ' . $this->update['message']['from']['last_name'];
     }
 }
