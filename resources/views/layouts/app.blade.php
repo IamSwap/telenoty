@@ -16,7 +16,7 @@
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,700" rel="stylesheet">
 
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
@@ -77,6 +77,13 @@
         <main class="py-4">
             @yield('content')
         </main>
+
+        <footer class="mt-5 border-top py-5">
+            <div class="container  text-center">
+                <p>A free tool by created by <strong>Swapnil Bhavsar</strong> (<a href="https://twitter.com/swapnil_bhavsar">@swapnil_bhavsar</a>) &amp; <strong>Jim Shannon</strong> (<a href="https://twitter.com/jshannon63">@jshannon63</a>) for Laravel community!</p>
+                <p class="mb-0 font-italic" style="font-size: 1.2rem;">Made with ❤ using Laravel framework</p>
+            </div>
+        </footer>
     </div>
 </body>
 

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Token;
+use App\Server;
 use Illuminate\Http\Request;
 
 class ServerController extends Controller
@@ -13,19 +15,24 @@ class ServerController extends Controller
      */
     public function index(Request $request)
     {
-        $user = $request->user();
-
-        return $user->servers()->latest()->get();
+        return $request->user()->servers()->latest()->get();
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Undocumented function
      *
-     * @return \Illuminate\Http\Response
+     * @param Server $server
+     * @return void
      */
-    public function create()
+    public function show(Server $server, Request $request)
     {
-        //
+        if ($request->user()->id != $server->user_id) {
+            return response()->json([
+                'message' => 'You are not authorized to view this server!'
+            ], 403);
+        }
+
+        return $server->load('receivers');
     }
 
     /**
@@ -36,51 +43,60 @@ class ServerController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $this->validate($request, [
+            'title' => 'required',
+            'status' => 'required'
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        $server = $request->user()->servers()->create([
+            'title' => $request->input('title'),
+            'token' => Token::unique('servers', 'token', 32), // Generate unique token
+            'status' => ($request->input('active') == 'active') ? 'active' : 'inactive'
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return $server;
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  Server $server
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Server $server)
     {
-        //
+        $this->validate($request, [
+            'title' => 'required',
+            'status' => 'required'
+        ]);
+
+        if ($request->user()->id != $server->user_id) {
+            return response()->json([
+                'message' => 'You are not authorized to update this server!'
+            ], 403);
+        }
+
+        $server->update([
+            'title' => $request->input('title'),
+            'status' => ($request->input('active') == 'active') ? 'active' : 'inactive'
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  Server $server
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Server $server, Request $request)
     {
-        //
+        if ($request->user()->id != $server->user_id) {
+            return response()->json([
+                'message' => 'You are not authorized to delete this server!'
+            ], 403);
+        }
+
+        $server->delete();
     }
 }

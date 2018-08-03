@@ -1,6 +1,3 @@
-// Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
-
 // Variables
 @import 'variables';
 
@@ -39,6 +36,17 @@ nav.navbar .dropdown-menu .dropdown-item {
     }
     h5 {
       margin: 0;
+    }
+  }
+
+  .table {
+    th {
+      background-color: #EBECED;
+      border-bottom: 0;
+      padding: 0.85rem 1.25rem;
+    }
+    td {
+      padding: 0.85rem 1.25rem;
     }
   }
 }
