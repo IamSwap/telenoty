@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,3 +31,5 @@ Route::get('/dashboard/{vue_router?}', 'DashboardController@index')->where('vue_
 // Route::get('/dev', function () {
 //     return Password::getRepository()->createNewToken();
 // });
+
+// test
