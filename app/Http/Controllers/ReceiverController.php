@@ -142,7 +142,7 @@ class ReceiverController extends Controller
             'status' => 'active'
         ]);
 
-        $message = 'Successfully authorized Server *'.$server->title.'* to @TeleNotyBot. You are now able to receive Telegram notification for this server.';
+        $message = '🎉 Successfully authorized Server *'.$server->title.'* to @TeleNotyBot. You are now able to receive Telegram notification for this server.';
 
         Telegram::sendMessage([
             'chat_id' => $receiver->chat_id,
