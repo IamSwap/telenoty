@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Server;
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller
@@ -15,11 +16,45 @@ class NotificationController extends Controller
      */
     public function notify($token, Request $request)
     {
-        /* {"status":"success","server":{"id":221222,"name":"telenoty"},"site":{"id":587400,"name":"telenoty.com"},"commit_hash":"105fc0ab3179d07f3d706a23f3ec615ae948b131","commit_url":"https:\/\/github.com\/IamSwap\/telenoty\/commit\/105fc0ab3179d07f3d706a23f3ec615ae948b131","commit_author":"Swapnil Bhavsar","commit_message":"Added system models & setup"} */
+        $message = $this->parseMessage($request->all());
 
-        Telegram::sendMessage([
-            'chat_id' => $token,
-            'text' => json_encode($request->all())
-        ]);
+        $server = Server::where('token', $token)->first();
+
+        if ($server && $server->status == 'active') {
+            $receivers = $server->receivers()->where('status', 'active')->get();
+
+            foreach ($receivers as $receiver) {
+                Telegram::sendMessage([
+                    'chat_id' => $receiver->chat_id,
+                    'text' => $message,
+                    'parse_mode' => 'markdown'
+                ]);
+            }
+        }
+    }
+
+    /**
+     * Parse message;
+     *
+     * @param array $data
+     * @return void
+     */
+    private function parseMessage(array $data)
+    {
+        if ($data['status'] == 'success') {
+            return '✅ '. $data['commit_author'] .' deployed some fresh code!
+
+*Server*: '.$data['server']['name'].'
+*Site*: ['.$data['site']['name'].']('.$data['site']['name'].')
+*Commit*: ['.$data['commit_url'].']('.$data['commit_url'].')
+*Message*: '.$data['commit_message'];
+        }
+
+        return '❌ '. $data['commit_author'] .' deployed some fresh code!
+
+*Server*: '.$data['server']['name'].'
+*Site*: ['.$data['site']['name'].']('.$data['site']['name'].')
+*Commit*: ['.$data['commit_url'].']('.$data['commit_url'].')
+*Message*: '.$data['commit_message'];
     }
 }

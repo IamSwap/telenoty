@@ -44,7 +44,7 @@
                 </div>
 
                 <div class="d-flex justify-content-center align-items-center text-center" v-else>
-                    <div>
+                    <div class="py-4">
                         <p>You have no servers yet. Please add one to continue.</p>
                         <button class="btn btn-primary" @click="showAddServerModal()">Add a server</button>
                     </div>
