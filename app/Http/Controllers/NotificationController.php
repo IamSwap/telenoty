@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Telegram;
 use App\Server;
 use Illuminate\Http\Request;
 
