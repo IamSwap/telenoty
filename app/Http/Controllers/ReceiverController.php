@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Token;
+use Telegram;
 use App\Server;
 use App\Receiver;
 use Illuminate\Http\Request;
