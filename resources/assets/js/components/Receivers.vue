@@ -116,6 +116,10 @@ export default {
     },
     mounted() {
         this.fetch();
+        Bus.$on('receiverAuthorized', () => {
+            this.fetch();
+            $(this.$refs.modalToken).modal('hide');
+        });
     },
     methods: {
         fetch() {
@@ -156,7 +160,7 @@ export default {
         },
         viewToken(receiver) {
             this.currentReceiver = receiver;
-             $(this.$refs.modalToken).modal('show');
+            $(this.$refs.modalToken).modal('show');
         },
         deleteReceiver(receiver) {
             swal({

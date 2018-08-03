@@ -63,6 +63,7 @@ export default {
                     axios.post(`/api/servers/${receiver.server.id}/receivers/${receiver.id}/authorize`, data)
                         .then(response => {
                             swal('Authorized!', `${receiver.name} is now authorized to receive deployment notifications for ${receiver.server.title}`, 'success');
+                            Bus.$emit('receiverAuthorized');
                         }, error => {
                             swal('Oops!', 'There was error in activating receiver!', 'error');
                         })

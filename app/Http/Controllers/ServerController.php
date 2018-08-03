@@ -51,7 +51,7 @@ class ServerController extends Controller
         $server = $request->user()->servers()->create([
             'title' => $request->input('title'),
             'token' => Token::unique('servers', 'token', 32), // Generate unique token
-            'status' => ($request->input('active') == 'active') ? 'active' : 'inactive'
+            'status' => ($request->input('status') == 'active') ? 'active' : 'inactive'
         ]);
 
         return $server;
@@ -79,7 +79,7 @@ class ServerController extends Controller
 
         $server->update([
             'title' => $request->input('title'),
-            'status' => ($request->input('active') == 'active') ? 'active' : 'inactive'
+            'status' => ($request->input('status') == 'active') ? 'active' : 'inactive'
         ]);
     }
 

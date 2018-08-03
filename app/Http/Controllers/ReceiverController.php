@@ -140,5 +140,13 @@ class ReceiverController extends Controller
             'username' => $request->input('username'),
             'status' => 'active'
         ]);
+
+        $message = 'Successfully authorized Server *'.$server->title.'* to @TeleNotyBot. You are now able to receive Telegram notification for this server.';
+
+        Telegram::sendMessage([
+            'chat_id' => $receiver->chat_id,
+            'text' => $message,
+            'parse_mode' => 'markdown'
+        ]);
     }
 }
