@@ -26,16 +26,6 @@ class ReceiverController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  Server $server
@@ -114,5 +104,41 @@ class ReceiverController extends Controller
         }
 
         $receiver->delete();
+    }
+
+    /**
+     * Authorize the specified receiver in storage.
+     *
+     * @param  Server $server
+     * @param  Receiver  $receiver
+     * @param  Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function activate(Server $server, Receiver $receiver, Request $request)
+    {
+        $this->validate($request, [
+            'chat_id' => 'required',
+            'name' => 'required',
+            'username' => 'required'
+        ]);
+
+        if ($request->user()->id != $server->user_id) {
+            return response()->json([
+                'message' => 'Unauthorized Request!'
+            ], 403);
+        }
+
+        if ($server->id != $receiver->server_id) {
+            return response()->json([
+                'message' => 'Bad Request!'
+            ], 403);
+        }
+
+        $receiver->update([
+            'chat_id' => $request->input('chat_id'),
+            'name' => $request->input('name'),
+            'username' => $request->input('username'),
+            'status' => 'active'
+        ]);
     }
 }

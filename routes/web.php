@@ -16,15 +16,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('/notify/{token}', function ($token, Request $request) {
-    \Log::info($request->all());
-    $status = $request->input('status');
-
-    Telegram::sendMessage([
-        'chat_id' => $token,
-        'text' => json_encode($request->all())
-    ]);
-});
+Route::post('/notify/{token}', 'NotificationController@notify');
 
 Route::post(config('telegram.bot_token') . '/webhook', function () {
     $update = Telegram::commandsHandler(true);

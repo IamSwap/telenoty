@@ -18,7 +18,7 @@
                 <p class="font-size: 1rem;">Here you can generate tokens for your <strong>Telegram</strong> users to authorize with 🤖 <strong>TeleNotyBot</strong>, our Telegram bot to deployment notifications.</p>
                 <h5>How to use these tokens?</h5>
                 <ol>
-                    <li>First, make sure to <a href="#" role="button" @click="generateToken()">Generate</a> a token for your Telegram user.</li>
+                    <li>First, make sure to <a href="#" role="button" @click="generateToken()">generate</a> a token for your Telegram user.</li>
                     <li>Open your <strong>Telegram</strong> app &amp; search for our bot <strong>TeleNotyBot</strong></li>
                     <li>Send <code>/start</code> command to start conversation with bot.</li>
                     <li>Send <code>/authorize <i>[your-token]</i></code> command to start authorization with bot.</li>
@@ -27,6 +27,7 @@
             <div class="table-responsive" v-if="server.receivers.length">
                 <table class="table mb-0">
                     <thead>
+                        <th>ID</th>
                         <th>Name</th>
                         <th>Username</th>
                         <th>Status</th>
@@ -34,13 +35,14 @@
                     </thead>
                     <tbody>
                         <tr v-for="receiver in server.receivers" :key="receiver.id">
+                            <td>{{ receiver.id }}</td>
                             <td>
-                                <span v-if="receiver.name">@{{ receiver.name }}</span>
-                                <span class="text-muted">---</span>
+                                <span v-if="receiver.name">{{ receiver.name }}</span>
+                                <span class="text-muted" v-else>---</span>
                             </td>
                             <td>
                                 <span class="text-muted" v-if="receiver.username">@{{ receiver.username }}</span>
-                                <span class="text-muted">---</span>
+                                <span class="text-muted" v-else>---</span>
                             </td>
                             <td>
                                 <span class="badge" :class="{ 'badge-success': (receiver.status === 'active'), 'badge-danger': (receiver.status === 'inactive')  }">{{ receiver.status }}</span>
@@ -104,7 +106,7 @@
 
 <script>
 export default {
-    props: [ 'id' ],
+    props: [ 'id', 'user' ],
     data() {
         return {
             server: '',

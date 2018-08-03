@@ -21,7 +21,6 @@ window.swal = require('sweetalert');
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-
 Vue.component('dashboard', require('./components/Dashboard.vue'));
 
 import routes from './routes';
@@ -36,3 +35,5 @@ const app = new Vue({
     router,
     el: '#app'
 });
+
+

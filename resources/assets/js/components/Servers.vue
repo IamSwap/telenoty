@@ -14,6 +14,7 @@
                     <table class="table mb-0">
                         <thead>
                             <tr>
+                                <th>ID</th>
                                 <th>Server</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-center">Webhook</th>
@@ -22,6 +23,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="server in servers" :key="server.id">
+                                <td>{{ server.id }}</td>
                                 <td>
                                     <router-link :to="`/dashboard/servers/${server.id}`"><strong>{{ server.title }}</strong></router-link>
                                 </td>

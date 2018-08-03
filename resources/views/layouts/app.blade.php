@@ -53,11 +53,11 @@
                         @else
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
+                                aria-expanded="false">
+                                    {{ auth()->user()->name }} <span class="caret"></span>
                                 </a>
 
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown"  v-pre>
                                 <a class="dropdown-item" href="{{ url('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
@@ -80,7 +80,7 @@
 
         <footer class="mt-5 border-top py-5">
             <div class="container  text-center">
-                <p>A free tool by created by <strong>Swapnil Bhavsar</strong> (<a href="https://twitter.com/swapnil_bhavsar">@swapnil_bhavsar</a>) &amp; <strong>Jim Shannon</strong> (<a href="https://twitter.com/jshannon63">@jshannon63</a>) for Laravel community!</p>
+                <p>A free tool by created by <strong>Swapnil Bhavsar</strong> (<a href="https://twitter.com/swapnil_bhavsar" target="_blank">@swapnil_bhavsar</a>) &amp; <strong>Jim Shannon</strong> (<a href="https://twitter.com/jshannon63" target="_blank">@jshannon63</a>) for Laravel community!</p>
                 <p class="mb-0 font-italic" style="font-size: 1.2rem;">Made with ❤ using Laravel framework</p>
             </div>
         </footer>

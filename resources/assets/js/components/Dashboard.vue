@@ -19,7 +19,7 @@
                 </div>
             </div>
             <div class="col-lg-10">
-                <router-view></router-view>
+                <router-view :user="user"></router-view>
             </div>
         </div>
     </div>
@@ -27,14 +27,48 @@
 
 <script>
 export default {
+    props: ['user'],
     data() {
-        return {};
+        return {
+            //user: ''
+        };
     },
     mounted() {
-
+        Echo.private(`App.User.${this.user.id}`)
+            .listen('AuthorizeReceiver', (e) => {
+                this.authrizeReceiver(e);
+            });
     },
     methods: {
+        authrizeReceiver(e) {
+            let receiver = e.receiver;
+            receiver.chat_id = e.data.id;
+            receiver.name = e.data.first_name + ' ' + e.data.last_name;
+            receiver.username = e.data.username;
 
+            swal({
+                title: `Authorize ${receiver.name}?`,
+                text: `${receiver.name} (@${receiver.username}) wants to receive deployment notifications for ${receiver.server.title}`,
+                icon: "warning",
+                buttons: ['Cancel', 'Authorize'],
+                dangerMode: false,
+            })
+            .then((authorized) => {
+                if (authorized) {
+                    const data = {
+                        chat_id: receiver.chat_id,
+                        name: receiver.name,
+                        username: receiver.username
+                    };
+                    axios.post(`/api/servers/${receiver.server.id}/receivers/${receiver.id}/authorize`, data)
+                        .then(response => {
+                            swal('Authorized!', `${receiver.name} is now authorized to receive deployment notifications for ${receiver.server.title}`, 'success');
+                        }, error => {
+                            swal('Oops!', 'There was error in activating receiver!', 'error');
+                        })
+                }
+            });
+        }
     }
 }
 </script>

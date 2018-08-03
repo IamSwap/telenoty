@@ -59,5 +59,6 @@ return [
         // Telegram\Bot\Commands\HelpCommand::class,
         App\Console\Commands\StartCommand::class,
         App\Console\Commands\AuthorizeCommand::class,
+        App\Console\Commands\RevokeCommand::class,
     ],
 ];
