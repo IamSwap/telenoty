@@ -67,7 +67,7 @@
 
                                 <p>Also, I have made TeleNoty to look like Forge's interface. So that Forge user can feel it at home. Hope Taylor &amp; team won't mind bringing Forge's design to TeleNoty.</p>
 
-                                <p>TeleNoty is an open source app &amp; source is available to browse on <a href="https://github.com/iamswap/telenoty" target="_blank">GitHub</a>. If you found any bug, please report them by opening an issue on GitHub.</p>
+                                <p>TeleNoty is an open source app &amp; source is available to browse on <a href="https://github.com/iamswap/telenoty" target="_blank">GitHub</a>. If you find any bugs, please report them by opening an issue on GitHub or feel free to submit pull request.</p>
 
                                 <p>Hope you will find it useful. Happy coding :)</p>
                                 <p>Thanks :) <br>
