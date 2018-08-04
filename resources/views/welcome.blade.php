@@ -28,7 +28,7 @@
     </head>
     <body class="welcome-page">
         <div id="app">
-            <nav class="navbar navbar-expand-md navbar-light green-bt py-3 mb-4">
+            <nav class="navbar navbar-expand-md navbar-light green-bt py-3">
                 <div class="container">
                     <a class="navbar-brand" href="{{ url('/') }}">
                         <img src="{{ url('images/telenoty-logo-light.svg') }}" alt="TeleNoty" width="150px">
@@ -56,7 +56,7 @@
 
             <div class="container">
                 <div class="row d-flex justify-content-center">
-                    <div class="col-lg-6 col-md-8 my-5">
+                    <div class="col-lg-8 col-md-10 my-5">
                         <div class="card">
                             <div class="card-body bg-white">
                                 <h4 class="mb-3">Hello! 🎉</h4>
