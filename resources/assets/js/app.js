@@ -10,6 +10,10 @@ require('./bootstrap');
 window.Vue = require('vue');
 window.Bus = new Vue();
 
+// Clipboard
+import VueClipboard from 'vue-clipboard2';
+Vue.use(VueClipboard)
+
 // Import Vue Router
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);

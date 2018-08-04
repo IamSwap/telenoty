@@ -23,6 +23,7 @@
     "dependencies": {
         "laravel-echo": "^1.4.0",
         "pusher-js": "^4.2.2",
-        "sweetalert": "^2.1.0"
+        "sweetalert": "^2.1.0",
+        "vue-clipboard2": "^0.2.1"
     }
 }

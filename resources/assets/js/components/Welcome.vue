@@ -10,7 +10,15 @@
                 <p>Then find the section called <strong>Deployment Webhooks</strong> &amp; add webhook using the following URL.</p>
 
                 <h5>Webhook URL:</h5>
-                <code id="webhook">https://telenoty.com/notify/{{ user.webhook_token }}</code>
+
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" :value="`https://telenoty.com/notify/${user.webhook_token}`">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button" v-clipboard:copy="`https://telenoty.com/notify/${user.webhook_token}`" v-clipboard:success="webhookCopied">
+                            <img src="/images/clippy.svg" width="13">
+                        </button>
+                    </div>
+                </div>
 
                 <hr>
 
@@ -28,6 +36,11 @@
 
 <script>
 export default {
-    props: ['user']
+    props: ['user'],
+    methods: {
+        webhookCopied() {
+            swal('Webhook has been copied to your clipboard!');
+        }
+    }
 }
 </script>
