@@ -27,7 +27,3 @@ Route::post(config('telegram.bot_token') . '/webhook', function () {
 Auth::routes();
 
 Route::get('/dashboard/{vue_router?}', 'DashboardController@index')->where('vue_router', '[\/\w\.-]*');
-
-// Route::get('/dev', function () {
-//     return Password::getRepository()->createNewToken();
-// });
