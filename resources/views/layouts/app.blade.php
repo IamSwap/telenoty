@@ -30,7 +30,7 @@
 
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-dark navbar-laravel py-3">
+        <nav class="navbar navbar-expand-md navbar-dark navbar-laravel py-2">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <img src="{{ url('images/telenoty-logo.svg') }}" alt="TeleNoty" width="150px">
