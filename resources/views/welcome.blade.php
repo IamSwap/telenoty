@@ -73,8 +73,14 @@
                                 <p>Thanks :) <br>
                                     Swapnil Bhavsar
                                 </p>
+
+                                <div class="text-center py-2">
+                                    <a href="{{ url('register') }}" class="btn btn-primary">👉 Get started!</a>
+                                </div>
                             </div>
                         </div>
+
+
                     </div>
                 </div>
             </div>
