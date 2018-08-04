@@ -2,18 +2,18 @@
 
 namespace App\Events;
 
-use App\Receiver;
+use App\Subscriber;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class AuthorizeReceiver implements ShouldBroadcast
+class AuthorizeSubscriber implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $receiver;
+    public $subscriber;
     public $data;
 
     /**
@@ -21,9 +21,9 @@ class AuthorizeReceiver implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct(Receiver $receiver, $data)
+    public function __construct(Subscriber $subscriber, $data)
     {
-        $this->receiver = $receiver;
+        $this->subscriber = $subscriber;
         $this->data = $data;
     }
 
@@ -34,6 +34,6 @@ class AuthorizeReceiver implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('App.User.'.$this->receiver->server->user_id);
+        return new PrivateChannel('App.User.'.$this->subscriber->user_id);
     }
 }

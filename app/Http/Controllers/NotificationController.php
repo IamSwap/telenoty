@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Telegram;
-use App\Server;
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller
@@ -19,14 +19,14 @@ class NotificationController extends Controller
     {
         $message = $this->parseMessage($request->all());
 
-        $server = Server::where('token', $token)->first();
+        $user = User::where('webhook_token', $token)->first();
 
-        if ($server && $server->status == 'active') {
-            $receivers = $server->receivers()->where('status', 'active')->get();
+        if ($user) {
+            $subscribers = $user->subscribers()->where('status', 'active')->get();
 
-            foreach ($receivers as $receiver) {
+            foreach ($subscribers as $subscriber) {
                 Telegram::sendMessage([
-                    'chat_id' => $receiver->chat_id,
+                    'chat_id' => $subscriber->chat_id,
                     'text' => $message,
                     'parse_mode' => 'markdown'
                 ]);

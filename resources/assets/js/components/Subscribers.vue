@@ -1,16 +1,8 @@
 <template>
     <div>
-        <div class="card" v-if="server">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb bg-white mb-0">
-                    <li class="breadcrumb-item">
-                        <router-link to="/dashboard">My Servers</router-link>
-                    </li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ server.title }}</li>
-                </ol>
-            </nav>
+        <div class="card">
             <div class="card-header d-flex align-items-center justify-content-between">
-                <h5>Telegram Receivers <span class="text-muted">({{ server.title }})</span></h5>
+                <h5>Telegram Subscribers</h5>
                 <button class="btn btn-primary" @click="generateToken()">Generate a token</button>
             </div>
 
@@ -24,7 +16,7 @@
                     <li>Send <code>/authorize <i>[your-token]</i></code> command to start authorization with bot.</li>
                 </ol>
             </div>
-            <div class="table-responsive" v-if="server.receivers.length">
+            <div class="table-responsive" v-if="subscribers.length">
                 <table class="table mb-0">
                     <thead>
                         <th>ID</th>
@@ -34,32 +26,32 @@
                         <th>&nbsp;</th>
                     </thead>
                     <tbody>
-                        <tr v-for="receiver in server.receivers" :key="receiver.id">
-                            <td>{{ receiver.id }}</td>
+                        <tr v-for="subscriber in subscribers" :key="subscriber.id">
+                            <td>{{ subscriber.id }}</td>
                             <td>
-                                <span v-if="receiver.name">{{ receiver.name }}</span>
+                                <span v-if="subscriber.name">{{ subscriber.name }}</span>
                                 <span class="text-muted" v-else>---</span>
                             </td>
                             <td>
-                                <span class="text-muted" v-if="receiver.username">@{{ receiver.username }}</span>
+                                <span class="text-muted" v-if="subscriber.username">@{{ subscriber.username }}</span>
                                 <span class="text-muted" v-else>---</span>
                             </td>
                             <td>
-                                <span class="badge" :class="{ 'badge-success': (receiver.status === 'active'), 'badge-danger': (receiver.status === 'inactive')  }">{{ receiver.status }}</span>
+                                <span class="badge" :class="{ 'badge-success': (subscriber.status === 'active'), 'badge-danger': (subscriber.status === 'inactive')  }">{{ subscriber.status }}</span>
                             </td>
                             <td class="d-flex justify-content-end text-right">
-                                <button class="btn btn-sm btn-light border mr-2" @click="viewToken(receiver)">View Token</button>
+                                <button class="btn btn-sm btn-light border mr-2" @click="viewToken(subscriber)">View Token</button>
 
                                 <button class="btn btn-sm mr-2 btn-info text-white"
-                                    @click="makeActive(receiver)"
-                                    v-if="receiver.status === 'inactive'"> Make Active
+                                    @click="makeActive(subscriber)"
+                                    v-if="subscriber.status === 'inactive'"> Make Active
                                 </button>
                                 <button class="btn btn-sm mr-2 btn-warning"
-                                    @click="makeInactive(receiver)"
-                                    v-if="receiver.status === 'active'"> Make Inactive
+                                    @click="makeInactive(subscriber)"
+                                    v-if="subscriber.status === 'active'"> Make Inactive
                                 </button>
 
-                                <button class="btn btn-sm btn-danger" @click="deleteReceiver(receiver)">Delete</button>
+                                <button class="btn btn-sm btn-danger" @click="deleteSubscriber(subscriber)">Delete</button>
                             </td>
                         </tr>
                     </tbody>
@@ -83,11 +75,11 @@
                     <div class="modal-body">
                         <h5>How to use this token?</h5>
                         <hr>
-                        <p>You can use this token to authorize with our Telegram bot 🤖 <strong>TeleNotyBot</strong> to receive deployment notifications from <strong>{{ server.title }}</strong>.</p>
+                        <p>You can use this token to authorize with our Telegram bot 🤖 <strong>TeleNotyBot</strong> to receive deployment notifications.</p>
                         <ol>
                             <li>Open your <strong>Telegram</strong> app &amp; search for our bot <strong>TeleNotyBot</strong></li>
                             <li>Send <code>/start</code> command to start conversation with bot.</li>
-                            <li>Send <code>/authorize {{ currentReceiver.token }}</code> command to start authorization with bot.</li>
+                            <li>Send <code>/authorize {{ currentSubscriber.token }}</code> command to start authorization with bot.</li>
                         </ol>
                         <hr>
                         <div class="text-center">
@@ -109,14 +101,14 @@ export default {
     props: [ 'id', 'user' ],
     data() {
         return {
-            server: '',
+            subscribers: '',
             loading: false,
-            currentReceiver: ''
+            currentSubscriber: ''
         }
     },
     mounted() {
         this.fetch();
-        Bus.$on('receiverAuthorized', () => {
+        Bus.$on('subscriberAuthorized', () => {
             this.fetch();
             $(this.$refs.modalToken).modal('hide');
         });
@@ -124,20 +116,9 @@ export default {
     methods: {
         fetch() {
             this.loading = true;
-            axios.get(`/api/servers/${this.id}`)
+            axios.get(`/api/subscribers`)
                 .then(response => {
-                    this.server = response.data;
-                    this.loading = false;
-                }, error => {
-                    this.loading = false;
-                    swal('Oops!', error.response.data.message, 'error');
-                });
-        },
-        fetchReceivers() {
-            this.loading = true;
-            axios.get(`/api/servers/${this.id}/receivers`)
-                .then(response => {
-                    this.server.receivers = response.data;
+                    this.subscribers = response.data;
                     this.loading = false;
                 }, error => {
                     this.loading = false;
@@ -146,11 +127,11 @@ export default {
         },
         generateToken() {
             this.loading = true;
-            axios.post(`/api/servers/${this.id}/receivers`)
+            axios.post(`/api/subscribers`)
                 .then(response => {
-                    this.fetchReceivers();
+                    this.fetch();
                     this.loading = false;
-                    this.currentReceiver = response.data;
+                    this.currentSubscriber = response.data;
                     swal('Generated', 'Token generated successfully!', 'success');
                     $(this.$refs.modalToken).modal('show');
                 }, error => {
@@ -158,64 +139,64 @@ export default {
                     swal('Oops!', error.response.data.message, 'error');
                 });
         },
-        viewToken(receiver) {
-            this.currentReceiver = receiver;
+        viewToken(subscriber) {
+            this.currentSubscriber = subscriber;
             $(this.$refs.modalToken).modal('show');
         },
-        deleteReceiver(receiver) {
+        deleteSubscriber(subscriber) {
             swal({
                 title: "Are you sure?",
-                text: "This receiver will be deleted from our database!",
+                text: "This subscriber will be deleted from our database!",
                 icon: "warning",
                 buttons: true,
                 dangerMode: true,
             })
-            .then((deleteReceiver) => {
-                if (deleteReceiver) {
-                    axios.delete(`/api/servers/${this.server.id}/receivers/${receiver.id}`)
+            .then((deleteSubscriber) => {
+                if (deleteSubscriber) {
+                    axios.delete(`/api/subscribers/${subscriber.id}`)
                         .then(response => {
-                            this.fetchReceivers();
-                            swal('Deleted', 'Receiver has been deleted!', 'success');
+                            this.fetch();
+                            swal('Deleted', 'Subscriber has been deleted!', 'success');
                         }, error => {
                             swal('Oops!', error.response.data.message, 'error');
                         })
                 }
             });
         },
-        makeActive(receiver) {
+        makeActive(subscriber) {
             swal({
                 title: "Are you sure?",
-                text: "This receiver will be activated!",
+                text: "This subscriber will be activated!",
                 icon: "warning",
                 buttons: ['No', 'Yes'],
                 dangerMode: false,
             })
             .then((makeActive) => {
                 if (makeActive) {
-                    axios.patch(`/api/servers/${this.server.id}/receivers/${receiver.id}`, { status: 'active' })
+                    axios.patch(`/api/subscribers/${subscriber.id}`, { status: 'active' })
                         .then(response => {
-                            this.fetchReceivers();
-                            swal('Activated', 'Receiver has been activated & will get notifications on Telegram!', 'success');
+                            this.fetch();
+                            swal('Activated', 'Subscriber has been activated & will get notifications on Telegram!', 'success');
                         }, error => {
                             swal('Oops!', error.response.data.message, 'error');
                         })
                 }
             });
         },
-        makeInactive(receiver) {
+        makeInactive(subscriber) {
             swal({
                 title: "Are you sure?",
-                text: "This receiver will be deactivated!",
+                text: "This subscriber will be deactivated!",
                 icon: "warning",
                 buttons: ['No', 'Yes'],
                 dangerMode: true,
             })
             .then((makeInactive) => {
                 if (makeInactive) {
-                    axios.patch(`/api/servers/${this.server.id}/receivers/${receiver.id}`, { status: 'inactive' })
+                    axios.patch(`/api/subscribers/${subscriber.id}`, { status: 'inactive' })
                         .then(response => {
-                            this.fetchReceivers();
-                            swal('Deactivated', 'Receiver has been deactivated & will not receive notifications on Telegram!', 'success');
+                            this.fetch();
+                            swal('Deactivated', 'Subscriber has been deactivated & will not receive notifications on Telegram!', 'success');
                         }, error => {
                             swal('Oops!', error.response.data.message, 'error');
                         })

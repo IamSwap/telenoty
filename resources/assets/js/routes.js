@@ -1,17 +1,12 @@
 export default [
     {
         path: '/dashboard',
-        component: require('./components/Servers.vue'),
+        component: require('./components/Welcome.vue'),
         props: true
     },
     {
-        path: '/dashboard/servers',
-        component: require('./components/Servers.vue'),
-        props: true
-    },
-    {
-        path: '/dashboard/servers/:id',
-        component: require('./components/Receivers.vue'),
+        path: '/dashboard/subscribers',
+        component: require('./components/Subscribers.vue'),
         props: true
     },
     {

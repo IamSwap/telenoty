@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Token;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -67,6 +68,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'webhook_token' => Token::unique('users', 'webhook_token', 32)
         ]);
     }
 }

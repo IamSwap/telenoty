@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'webhook_token'
     ];
 
     /**
@@ -34,5 +34,13 @@ class User extends Authenticatable
     public function servers()
     {
         return $this->hasMany(Server::class);
+    }
+
+    /**
+     * A server can have many receiver
+     */
+    public function subscribers()
+    {
+        return $this->hasMany(Subscriber::class);
     }
 }

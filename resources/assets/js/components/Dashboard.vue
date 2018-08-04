@@ -6,9 +6,15 @@
                 <div class="nav inner-nav mb-2">
                     <router-link to="/dashboard" class="nav-link mr-4" exact>
                         <span class="icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path class="heroicon-ui" d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2zm14 8V5H5v6h14zm0 2H5v6h14v-6zM8 9a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm0 8a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path class="heroicon-ui" d="M12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20zM5.68 7.1A7.96 7.96 0 0 0 4.06 11H5a1 1 0 0 1 0 2h-.94a7.95 7.95 0 0 0 1.32 3.5A9.96 9.96 0 0 1 11 14.05V9a1 1 0 0 1 2 0v5.05a9.96 9.96 0 0 1 5.62 2.45 7.95 7.95 0 0 0 1.32-3.5H19a1 1 0 0 1 0-2h.94a7.96 7.96 0 0 0-1.62-3.9l-.66.66a1 1 0 1 1-1.42-1.42l.67-.66A7.96 7.96 0 0 0 13 4.06V5a1 1 0 0 1-2 0v-.94c-1.46.18-2.8.76-3.9 1.62l.66.66a1 1 0 0 1-1.42 1.42l-.66-.67zM6.71 18a7.97 7.97 0 0 0 10.58 0 7.97 7.97 0 0 0-10.58 0z"/></svg>
                         </span>
-                        <span>My Servers</span>
+                        <span>Dashboard</span>
+                    </router-link>
+                    <router-link to="/dashboard/subscribers" class="nav-link mr-4" exact>
+                        <span class="icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path class="heroicon-ui" d="M9 12A5 5 0 1 1 9 2a5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm7 11a1 1 0 0 1-2 0v-2a3 3 0 0 0-3-3H7a3 3 0 0 0-3 3v2a1 1 0 0 1-2 0v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2zm1-5a1 1 0 0 1 0-2 5 5 0 0 1 5 5v2a1 1 0 0 1-2 0v-2a3 3 0 0 0-3-3zm-2-4a1 1 0 0 1 0-2 3 3 0 0 0 0-6 1 1 0 0 1 0-2 5 5 0 0 1 0 10z"/></svg>
+                        </span>
+                        <span>Subscribers</span>
                     </router-link>
                     <router-link to="/dashboard/settings" class="nav-link mr-4" exact>
                         <span class="icon">
@@ -35,20 +41,20 @@ export default {
     },
     mounted() {
         Echo.private(`App.User.${this.user.id}`)
-            .listen('AuthorizeReceiver', (e) => {
-                this.authrizeReceiver(e);
+            .listen('AuthorizeSubscriber', (e) => {
+                this.authorizeSubscriber(e);
             });
     },
     methods: {
-        authrizeReceiver(e) {
-            let receiver = e.receiver;
-            receiver.chat_id = e.data.id;
-            receiver.name = e.data.first_name + ' ' + e.data.last_name;
-            receiver.username = e.data.username;
+        authorizeSubscriber(e) {
+            let subscriber = e.subscriber;
+            subscriber.chat_id = e.data.id;
+            subscriber.name = e.data.first_name + ' ' + e.data.last_name;
+            subscriber.username = e.data.username;
 
             swal({
-                title: `Authorize ${receiver.name}?`,
-                text: `${receiver.name} (@${receiver.username}) wants to receive deployment notifications for ${receiver.server.title}`,
+                title: `Authorize ${subscriber.name}?`,
+                text: `${subscriber.name} (@${subscriber.username}) wants to receive deployment notifications!`,
                 icon: "warning",
                 buttons: ['Cancel', 'Authorize'],
                 dangerMode: false,
@@ -56,16 +62,16 @@ export default {
             .then((authorized) => {
                 if (authorized) {
                     const data = {
-                        chat_id: receiver.chat_id,
-                        name: receiver.name,
-                        username: receiver.username
+                        chat_id: subscriber.chat_id,
+                        name: subscriber.name,
+                        username: subscriber.username
                     };
-                    axios.post(`/api/servers/${receiver.server.id}/receivers/${receiver.id}/authorize`, data)
+                    axios.post(`/api/subscribers/${subscriber.id}/authorize`, data)
                         .then(response => {
-                            swal('Authorized!', `${receiver.name} is now authorized to receive deployment notifications for ${receiver.server.title}`, 'success');
-                            Bus.$emit('receiverAuthorized');
+                            swal('Authorized!', `${subscriber.name} is now authorized to receive deployment notifications`, 'success');
+                            Bus.$emit('subscriberAuthorized');
                         }, error => {
-                            swal('Oops!', 'There was error in activating receiver!', 'error');
+                            swal('Oops!', 'There was error in authorizing subscriber!', 'error');
                         })
                 }
             });

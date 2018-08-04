@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Receiver;
-use App\Events\AuthorizeReceiver;
+use App\Subscriber;
 use Telegram\Bot\Commands\Command;
+use App\Events\AuthorizeSubscriber;
 
 class AuthorizeCommand extends Command
 {
@@ -37,16 +37,16 @@ class AuthorizeCommand extends Command
 
 Eg.: /authorize _<server-token>_';
         } else {
-            $receiver = Receiver::where('token', $arguments)->first();
+            $subscriber = Subscriber::where('token', $arguments)->first();
 
-            if ($receiver) {
-                if (! $receiver->chat_id) {
-                    if (! $receiver->server->receivers()->where('chat_id', $from['id'])->exists()) {
+            if ($subscriber) {
+                if (! $subscriber->chat_id) {
+                    if (! $subscriber->user->subscribers()->where('chat_id', $from['id'])->exists()) {
                         $message = '✅ A popup will appear inside TeleNoty dashboard, please click *Authorize* button to approve autorization.';
 
-                        event(new AuthorizeReceiver($receiver, $from));
+                        event(new AuthorizeSubscriber($subscriber, $from));
                     } else {
-                        $message = '😥 You are already authorized with *TeleNotyBot*. Please delete existing token/receiver from TeleNoty dashboard & generate new token to attempt another authorization.';
+                        $message = '😥 You are already authorized with *TeleNotyBot*. Please delete existing token/subscriber from TeleNoty dashboard & generate new token to attempt another authorization.';
                     }
                 } else {
                     $message = '😰 This token is aleardy used for authorization with *TeleNotyBot*. Please generate new token from TeleNoty dashboard to attempt another authorization.';

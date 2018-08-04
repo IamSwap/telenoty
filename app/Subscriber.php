@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Receiver extends Model
+class Subscriber extends Model
 {
     /**
      * Fillable attributes
@@ -16,10 +16,10 @@ class Receiver extends Model
     ];
 
     /**
-     * A receiver is belongs to a server
+     * A receiver is belongs to a user
      */
-    public function server()
+    public function user()
     {
-        return $this->belongsTo(Server::class);
+        return $this->belongsTo(User::class);
     }
 }
