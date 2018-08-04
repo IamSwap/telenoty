@@ -63,9 +63,9 @@
 
                                 <p>Today, I am very happy to present you <strong>TeleNoty!</strong> A free tool to get your <a href="https://forge.laravel.com" target="_blank">Laravel Forge's</a> deployment notifications on <a href="https://telegram.org" target="_blank">Telegram</a>.</p>
 
-                                <p>Laravel forge supports <a href="https://slack.com" target="_blank">Slack</a> notifications but currently lacks the ability to send notifications to Telegram. So until Taylor (Creator for Laravel Forge) &amp; team add official implementation, please feel free to use TeleNoty for your team.</p>
+                                <p>Laravel forge supports <a href="https://slack.com" target="_blank">Slack</a> notifications but currently lacks the ability to send notifications to Telegram. So until Taylor (Creator for Laravel Forge) &amp; team adds official implementation, please feel free to use TeleNoty for your team.</p>
 
-                                <p>Also, I have tried to make TeleNoty look like Forge's interface. So that Forge user can feel it at home. Hope Taylor &amp; team won't mind bringing Forge's design to TeleNoty.</p>
+                                <p>Also, I have made TeleNoty to look like Forge's interface. So that Forge user can feel it at home. Hope Taylor &amp; team won't mind bringing Forge's design to TeleNoty.</p>
 
                                 <p>TeleNoty is an open source app &amp; source is available to browse on <a href="https://github.com/iamswap/telenoty" target="_blank">GitHub</a>. If you found any bug, please report them by opening an issue on GitHub.</p>
 
