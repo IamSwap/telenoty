@@ -34,11 +34,6 @@
 <script>
 export default {
     props: ['user'],
-    data() {
-        return {
-            //user: ''
-        };
-    },
     mounted() {
         Echo.private(`App.User.${this.user.id}`)
             .listen('AuthorizeSubscriber', (e) => {

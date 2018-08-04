@@ -7,7 +7,7 @@
             </div>
 
             <div class="card-body">
-                <p class="font-size: 1rem;">Here you can generate tokens for your <strong>Telegram</strong> users to authorize with 🤖 <strong>TeleNotyBot</strong>, our Telegram bot to deployment notifications.</p>
+                <p class="font-size: 1rem;">Here you can generate tokens for your <strong>Telegram</strong> users to authorize with 🤖 <strong>TeleNotyBot</strong> to deployment notifications.</p>
                 <h5>How to use these tokens?</h5>
                 <ol>
                     <li>First, make sure to <a href="#" role="button" @click="generateToken()">generate</a> a token for your Telegram user.</li>

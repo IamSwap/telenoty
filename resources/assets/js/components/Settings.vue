@@ -102,7 +102,6 @@ export default {
                     this.passwordFormErrors = {};
                     this.$refs.formPassword.reset();
                     swal('Updated', 'Profile information updated successfully!', 'success');
-
                 }, error => {
                     this.passwordFormErrors = error.response.data.errors;
                 });
