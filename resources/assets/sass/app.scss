@@ -78,3 +78,23 @@ nav.navbar .dropdown-menu .dropdown-item {
   display: flex;
   justify-content: center;
 }
+
+.welcome-page {
+  font-size: 1rem;
+  .green-bt {
+    border-top: 4px solid $primary;
+  }
+  .card,
+  .card-body {
+    border-radius: 0.35rem;
+  }
+  .btn-register {
+    color: $primary;
+    background: #ffffff;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+    box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.16);
+    border-radius: 3px;
+  }
+}
