@@ -6,8 +6,8 @@
             </div>
 
             <div class="card-body">
-                <p>In order to receive deployment notification, we will need to add following webhook inside Laravel Forge panel. So log in to your Forge panel &amp; go to the site for which you want receive deployment notifications.</p>
-                <p>Then find section called <strong>Deployment Webhooks</strong> &amp; add webhook using following URL.</p>
+                <p>In order to receive deployment notifications, you will need to add following webhook inside Laravel Forge panel. So log in to your Forge panel &amp; go to the site for which you want receive deployment notifications.</p>
+                <p>Then find the section called <strong>Deployment Webhooks</strong> &amp; add webhook using the following URL.</p>
 
                 <h5>Webhook URL:</h5>
                 <code id="webhook">https://telenoty.com/notify/{{ user.webhook_token }}</code>
