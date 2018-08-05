@@ -36,4 +36,5 @@ Auth::routes();
 Route::get('/dashboard/{vue_router?}', 'DashboardController@index')->where('vue_router', '[\/\w\.-]*');
 
 
+// Test 
 
