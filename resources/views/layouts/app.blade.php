@@ -88,7 +88,6 @@
         <footer class="mt-5 border-top py-5">
             <div class="container  text-center">
                 <p>A free tool by created by <strong>Swapnil Bhavsar</strong> (<a href="https://twitter.com/swapnil_bhavsar" target="_blank">@swapnil_bhavsar</a>) &amp; <strong>Jim Shannon</strong> (<a href="https://twitter.com/jshannon63" target="_blank">@jshannon63</a>) for Laravel community!</p>
-                <p class="mb-0 font-italic" style="font-size: 1.2rem;">Made with ❤ using Laravel framework</p>
             </div>
         </footer>
     </div>
