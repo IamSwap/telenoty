@@ -51,7 +51,7 @@ class NotificationController extends Controller
 *Message*: '.$data['commit_message'];
         }
 
-        return '❌ '. $data['commit_author'] .' deployed some fresh code!
+        return '❌ Something went wrong during deployment!
 
 *Server*: '.$data['server']['name'].'
 *Site*: ['.$data['site']['name'].']('.$data['site']['name'].')

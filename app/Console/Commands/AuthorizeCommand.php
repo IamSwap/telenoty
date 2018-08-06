@@ -42,7 +42,7 @@ Eg.: /authorize _<server-token>_';
             if ($subscriber) {
                 if (! $subscriber->chat_id) {
                     if (! $subscriber->user->subscribers()->where('chat_id', $from['id'])->exists()) {
-                        $message = '✅ A popup will appear inside TeleNoty dashboard, please click *Authorize* button to approve autorization.';
+                        $message = '✅ A popup will appear inside TeleNoty dashboard, please click *Authorize* button to approve authorization.';
 
                         event(new AuthorizeSubscriber($subscriber, $from));
                     } else {
