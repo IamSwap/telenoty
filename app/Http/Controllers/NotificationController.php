@@ -18,8 +18,6 @@ class NotificationController extends Controller
      */
     public function notify($token, Request $request)
     {
-        \Log::info($request->all());
-
         $message = $this->parseMessage($request->all());
 
         $user = User::where('webhook_token', $token)->first();
@@ -47,8 +45,6 @@ class NotificationController extends Controller
      */
     public function notifyProject($ptoken, $token, Request $request)
     {
-        \Log::info('project');
-        \Log::info($request->all());
         $message = $this->parseMessage($request->all());
 
         $user = User::where('webhook_token', $token)->first();
