@@ -29,15 +29,15 @@ class User extends Authenticatable
     ];
 
     /**
-     * An user can have many servers
+     * An user can have many projects
      */
-    public function servers()
+    public function projects()
     {
-        return $this->hasMany(Server::class);
+        return $this->hasMany(Project::class);
     }
 
     /**
-     * A server can have many receiver
+     * An user can have many subscribers
      */
     public function subscribers()
     {

@@ -10,6 +10,16 @@ export default [
         props: true
     },
     {
+        path: '/dashboard/projects',
+        component: require('./components/Projects.vue'),
+        props: true
+    },
+    {
+        path: '/dashboard/projects/:id',
+        component: require('./components/ProjectSubscribers.vue'),
+        props: true
+    },
+    {
         path: '/dashboard/settings',
         component: require('./components/Settings.vue'),
         props: true

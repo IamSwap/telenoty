@@ -18,9 +18,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group(['middleware' => 'auth:api'], function () {
-    Route::resource('/subscribers', 'SubscriberController');
-    Route::post('/subscribers/{subscriber}/authorize', 'SubscriberController@activate');
+    // Projects
+    Route::resource('/projects', 'ProjectController');
 
+    // Subscribers
+    Route::resource('/subscribers', 'SubscriberController');
+    Route::resource('/projects/{project}/subscribers', 'ProjectSubscriberController');
+    Route::post('/subscribers/{id}/authorize', 'SubscriberController@activate');
+
+    // Profile
     Route::post('/profile', 'SettingsController@profile');
     Route::post('/profile/password', 'SettingsController@password');
 });

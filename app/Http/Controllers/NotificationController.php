@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Telegram;
+use App\Project;
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller
@@ -17,6 +18,8 @@ class NotificationController extends Controller
      */
     public function notify($token, Request $request)
     {
+        \Log::info($request->all());
+
         $message = $this->parseMessage($request->all());
 
         $user = User::where('webhook_token', $token)->first();
@@ -30,6 +33,42 @@ class NotificationController extends Controller
                     'text' => $message,
                     'parse_mode' => 'markdown'
                 ]);
+            }
+        }
+    }
+
+    /**
+     * Notify user about deployments
+     *
+     * @param string $token
+     * @param string $ptoken
+     * @param Request $request
+     * @return void
+     */
+    public function notifyProject($ptoken, $token, Request $request)
+    {
+        \Log::info('project');
+        \Log::info($request->all());
+        $message = $this->parseMessage($request->all());
+
+        $user = User::where('webhook_token', $token)->first();
+        $project = Project::where('token', $ptoken)->first();
+
+        if ($user->id != $project->user_id) {
+            return response()->json(['message' => 'Invalid token!'], 400);
+        }
+
+        if ($user && $project) {
+            if ($project->status == 'active') {
+                $subscribers = $project->subscribers()->where('status', 'active')->get();
+
+                foreach ($subscribers as $subscriber) {
+                    Telegram::sendMessage([
+                        'chat_id' => $subscriber->chat_id,
+                        'text' => $message,
+                        'parse_mode' => 'markdown'
+                    ]);
+                }
             }
         }
     }

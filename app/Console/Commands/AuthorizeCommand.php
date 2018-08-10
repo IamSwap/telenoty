@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Subscriber;
+use App\ProjectSubscriber;
 use Telegram\Bot\Commands\Command;
 use App\Events\AuthorizeSubscriber;
 
@@ -37,11 +38,18 @@ class AuthorizeCommand extends Command
 
 Eg.: /authorize _<server-token>_';
         } else {
-            $subscriber = Subscriber::where('token', $arguments)->first();
+            $subscriber = $this->getSubscriber($arguments);
+
 
             if ($subscriber) {
                 if (! $subscriber->chat_id) {
-                    if (! $subscriber->user->subscribers()->where('chat_id', $from['id'])->exists()) {
+                    if (is_a($subscriber, 'App\Subscriber')) {
+                        $modal = $subscriber->user;
+                    } else {
+                        $modal = $subscriber->project;
+                    }
+
+                    if (! $modal->subscribers()->where('chat_id', $from['id'])->exists()) {
                         $message = '✅ A popup will appear inside TeleNoty dashboard, please click *Authorize* button to approve authorization.';
 
                         event(new AuthorizeSubscriber($subscriber, $from));
@@ -52,10 +60,27 @@ Eg.: /authorize _<server-token>_';
                     $message = '😰 This token is aleardy used for authorization with *TeleNotyBot*. Please generate new token from TeleNoty dashboard to attempt another authorization.';
                 }
             } else {
-                $message = '😬 Sorry, token *' . $token . '* cannot be found inside our database.';
+                $message = '😬 Sorry, token *' . $arguments . '* cannot be found inside our database.';
             }
         }
 
         $this->replyWithMessage(['text' => $message, 'parse_mode' => 'markdown']);
+    }
+
+    /**
+     * Get subsriber from token
+     *
+     * @param string $arguments
+     * @return void
+     */
+    private function getSubscriber($arguments)
+    {
+        $subscriber = Subscriber::where('token', $arguments)->first();
+
+        if (! $subscriber) {
+            $subscriber = ProjectSubscriber::where('token', $arguments)->first();
+        }
+
+        return $subscriber;
     }
 }

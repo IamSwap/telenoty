@@ -21,7 +21,7 @@ class AuthorizeSubscriber implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct(Subscriber $subscriber, $data)
+    public function __construct($subscriber, $data)
     {
         $this->subscriber = $subscriber;
         $this->data = $data;
@@ -34,6 +34,12 @@ class AuthorizeSubscriber implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('App.User.'.$this->subscriber->user_id);
+        if (is_a($this->subscriber, 'App\Subscriber')) {
+            return new PrivateChannel('App.User.'.$this->subscriber->user_id);
+        }
+
+        if (is_a($this->subscriber, 'App\ProjectSubscriber')) {
+            return new PrivateChannel('App.User.'.$this->subscriber->project->user_id);
+        }
     }
 }

@@ -2,7 +2,7 @@
     <div>
         <div class="card">
             <div class="card-header d-flex align-items-center justify-content-between">
-                <h5>Telegram Subscribers</h5>
+                <h5>{{ project.title }} Subscribers</h5>
                 <button class="btn btn-primary" @click="generateToken()">Generate a token</button>
             </div>
 
@@ -101,9 +101,10 @@
 
 <script>
 export default {
-    props: [ 'id', 'user', 'project' ],
+    props: [ 'id', 'user' ],
     data() {
         return {
+            project: '',
             subscribers: '',
             loading: false,
             currentSubscriber: ''
@@ -119,18 +120,20 @@ export default {
     methods: {
         fetch() {
             this.loading = true;
-            axios.get(`/api/subscribers`)
+            axios.get(`/api/projects/${this.id}/subscribers`)
                 .then(response => {
-                    this.subscribers = response.data;
+                    this.project = response.data.project;
+                    this.subscribers = response.data.subscribers;
                     this.loading = false;
                 }, error => {
                     this.loading = false;
-                    swal('Oops!', error.response.data.message, 'error');
+                    swal('Oops!', 'Unable to fetch subscribers', 'error');
+                   // window.location = `/404`;
                 });
         },
         generateToken() {
             this.loading = true;
-            axios.post(`/api/subscribers`)
+            axios.post(`/api/projects/${this.id}/subscribers`)
                 .then(response => {
                     this.fetch();
                     this.loading = false;
@@ -156,7 +159,7 @@ export default {
             })
             .then((deleteSubscriber) => {
                 if (deleteSubscriber) {
-                    axios.delete(`/api/subscribers/${subscriber.id}`)
+                    axios.delete(`/api/projects/${this.id}/subscribers/${subscriber.id}`)
                         .then(response => {
                             this.fetch();
                             swal('Deleted', 'Subscriber has been deleted!', 'success');
@@ -176,7 +179,7 @@ export default {
             })
             .then((makeActive) => {
                 if (makeActive) {
-                    axios.patch(`/api/subscribers/${subscriber.id}`, { status: 'active' })
+                    axios.patch(`/api/projects/${this.id}/subscribers/${subscriber.id}`, { status: 'active' })
                         .then(response => {
                             this.fetch();
                             swal('Activated', 'Subscriber has been activated & will get notifications on Telegram!', 'success');
@@ -196,7 +199,7 @@ export default {
             })
             .then((makeInactive) => {
                 if (makeInactive) {
-                    axios.patch(`/api/subscribers/${subscriber.id}`, { status: 'inactive' })
+                    axios.patch(`/api/projects/${this.id}/subscribers/${subscriber.id}`, { status: 'inactive' })
                         .then(response => {
                             this.fetch();
                             swal('Deactivated', 'Subscriber has been deactivated & will not receive notifications on Telegram!', 'success');

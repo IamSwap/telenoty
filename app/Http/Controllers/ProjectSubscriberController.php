@@ -4,45 +4,68 @@ namespace App\Http\Controllers;
 
 use Token;
 use Telegram;
+use App\Project;
 use App\Subscriber;
 use App\ProjectSubscriber;
 use Illuminate\Http\Request;
 
-class SubscriberController extends Controller
+class ProjectSubscriberController extends Controller
 {
     /**
-    * Display a listing of the resource.
-    *
-    * @return \Illuminate\Http\Response
-    */
-    public function index(Request $request)
+     * Get project subscribers.
+     *
+     * @param  \App\Project  $project
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Project $project, Request $request)
     {
-        return $request->user()->subscribers()->latest()->get();
+        if ($request->user()->id != $project->user_id) {
+            return response()->json(['message' => 'Unauthorized Request!'], 403);
+        }
+
+        return [
+            'project' => $project,
+            'subscribers' => $project->subscribers()->latest()->get()
+        ];
     }
+
 
     /**
      * Store a newly created resource in storage.
      *
+     * @param  \App\Project  $project
      * @param  Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Project $project, Request $request)
     {
-        return $request->user()->subscribers()->create([
+        if ($request->user()->id != $project->user_id) {
+            return response()->json(['message' => 'Unauthorized Request!'], 403);
+        }
+
+        $subscriber = $project->subscribers()->create([
             'token' => $this->getToken(),
             'status' => 'inactive'
         ]);
+
+        return $subscriber;
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
-     * @param  Subscriber $subscriber
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Project  $project
+     * @param \App\ProjectSubscriber $subscriber
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Subscriber $subscriber)
+    public function update(Request $request, Project $project, ProjectSubscriber $subscriber)
     {
+        if ($request->user()->id != $project->user_id) {
+            return response()->json(['message' => 'Unauthorized Request!'], 403);
+        }
+
         $this->validate($request, [
             'status' => 'required'
         ]);
@@ -59,35 +82,35 @@ class SubscriberController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param Subscriber $subscriber
-     * @param Request $request
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Project  $project
+     * @param \App\ProjectSubscriber $subscriber
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Subscriber $subscriber, Request $request)
+    public function destroy(Request $request, Project $project, ProjectSubscriber $subscriber)
     {
+        if ($request->user()->id != $project->user_id) {
+            return response()->json(['message' => 'Unauthorized Request!'], 403);
+        }
+
         $subscriber->delete();
     }
 
     /**
      * Authorize the specified subscriber in storage.
      *
-     * @param  int $id
-     * @param  Request  $request
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Project  $project
+     * @param \App\ProjectSubscriber $subscriber
      * @return \Illuminate\Http\Response
      */
-    public function activate($id, Request $request)
+    public function activate(Request $request, Project $project, ProjectSubscriber $subscriber)
     {
         $this->validate($request, [
             'chat_id' => 'required',
             'name' => 'required',
             'username' => 'required'
         ]);
-
-        $subscriber = $this->getSubscriber($id);
-
-        if (! $subscriber) {
-            return response()->json(['message' => 'Unable to authorize subscriber!'], 400);
-        }
 
         $subscriber->update([
             'chat_id' => $request->input('chat_id'),
@@ -96,30 +119,13 @@ class SubscriberController extends Controller
             'status' => 'active'
         ]);
 
-        $message = '🎉 Successfully authorized to @TeleNotyBot. You are now able to receive Telegram deployment notifications.';
+        $message = '🎉 Successfully authorized to @TeleNotyBot. You are now able to receive Telegram deployment notifications from project ' . $project->title . '!';
 
         Telegram::sendMessage([
             'chat_id' => $subscriber->chat_id,
             'text' => $message,
             'parse_mode' => 'markdown'
         ]);
-    }
-
-    /**
-     * Get subsriber
-     *
-     * @param int $id
-     * @return void
-     */
-    private function getSubscriber($id)
-    {
-        $subscriber = Subscriber::find($id);
-
-        if (! $subscriber) {
-            $subscriber = ProjectSubscriber::find($id);
-        }
-
-        return $subscriber;
     }
 
     /**

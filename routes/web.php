@@ -19,6 +19,7 @@ Route::get('/', function () {
 });
 
 // Handle post data from Laravel Forge
+Route::post('/notify/{ptoken}-{token}', 'NotificationController@notifyProject');
 Route::post('/notify/{token}', 'NotificationController@notify');
 
 // Handle Telegram Webook
@@ -34,7 +35,3 @@ Auth::routes();
 
 // Dashboard
 Route::get('/dashboard/{vue_router?}', 'DashboardController@index')->where('vue_router', '[\/\w\.-]*');
-
-
-// Test 
-
